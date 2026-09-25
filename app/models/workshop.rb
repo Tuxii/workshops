@@ -2,6 +2,7 @@ class Workshop < ApplicationRecord
   has_many :sessions, dependent: :destroy
   has_many :registrations, through: :sessions
   has_many :participants, -> { distinct }, through: :registrations
+  include Notable
 
   scope :published, -> { where(published: true) }
 

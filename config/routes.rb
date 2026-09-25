@@ -1,9 +1,11 @@
 Rails.application.routes.draw do
   resources :workshops do
     resources :sessions, only: %i[ new create ]
+    resources :notes, only: :create
   end
   resources :sessions, except: %i[ new create ] do
     resources :registrations, only: :create
+    resources :notes, only: :create
   end
   resources :registrations, only: :destroy
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

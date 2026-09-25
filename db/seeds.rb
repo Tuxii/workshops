@@ -90,5 +90,16 @@ register!(cooking, "2026-10-08 19:00", participants[10, 40])   # 40 inscrits
 register!(sewing, "2026-10-14 14:00", participants[50, 2])
 register!(bike, "2026-10-13 18:30", participants[52, 3])
 
+# --- Notes internes -----------------------------------------------------------
+
+def note!(notable, body)
+  notable.notes.find_or_create_by!(body: body)
+end
+
+note!(ceramics, "Commander 10 kg d'argile avant la première session.")
+note!(cooking, "Vérifier les allergies au moment de l'inscription.")
+note!(Session.find_by!(workshop: ceramics, starts_at: Time.zone.parse("2026-10-03 10:00")), "Salle 2, prévoir des tabliers.")
+note!(Session.find_by!(workshop: bike, starts_at: Time.zone.parse("2026-10-06 18:30")), "Apporter des chambres à air de rechange.")
+
 puts "#{Workshop.count} ateliers, #{Session.count} sessions, #{Participant.count} participants, " \
-     "#{Registration.count} inscriptions"
+     "#{Registration.count} inscriptions, #{Note.count} notes"

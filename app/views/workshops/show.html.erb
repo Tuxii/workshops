@@ -42,6 +42,8 @@
   <p class="text-muted">Aucune session programmée pour cet atelier.</p>
 <% end %>
 
+<%= render "notes/notes", notable: @workshop %>
+
 <div class="d-flex gap-2 mt-4">
   <%= link_to "Modifier", edit_workshop_path(@workshop), class: "btn btn-outline-secondary" %>
   <%= button_to "Supprimer", @workshop, method: :delete, class: "btn btn-outline-danger" %>

@@ -2,6 +2,7 @@ class Session < ApplicationRecord
   belongs_to :workshop
   has_many :registrations, dependent: :destroy
   has_many :participants, through: :registrations
+  include Notable
 
   enum :status, { draft: 0, published: 1, full: 2, cancelled: 3 }
 

@@ -10,7 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_29_184849) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_29_185314) do
+  create_table "notes", force: :cascade do |t|
+    t.text "body", null: false
+    t.string "notable_type", null: false
+    t.integer "notable_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["notable_type", "notable_id"], name: "index_notes_on_notable"
+  end
+
   create_table "participants", force: :cascade do |t|
     t.string "name", null: false
     t.string "email", null: false
