@@ -4,4 +4,5 @@
     Céramique, cuisine, réparation, couture : choisissez une session et réservez votre place avant qu'il n'y en ait plus.
   </p>
   <p class="text-muted"><%= pluralize(@published_workshops_count, "atelier publié", plural: "ateliers publiés") %> en ce moment.</p>
+  <%= link_to "Voir le catalogue", workshops_path, class: "btn btn-primary btn-lg" %>
 </div>
