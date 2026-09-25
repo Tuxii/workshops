@@ -65,6 +65,6 @@ class WorkshopsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def workshop_params
-      params.expect(workshop: [ :title, :description, :duration_minutes, :published ])
+      params.expect(workshop: [ :title, :description, :duration_minutes, :published, :handout ])
     end
 end

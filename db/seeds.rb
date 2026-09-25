@@ -90,6 +90,13 @@ register!(cooking, "2026-10-08 19:00", participants[10, 40])   # 40 inscrits
 register!(sewing, "2026-10-14 14:00", participants[50, 2])
 register!(bike, "2026-10-13 18:30", participants[52, 3])
 
+# --- Support PDF ---------------------------------------------------------------
+
+unless ceramics.handout.attached?
+  ceramics.handout.attach(io: File.open(Rails.root.join("db/seeds/ceramics-handout.pdf")),
+                          filename: "ceramics-handout.pdf", content_type: "application/pdf")
+end
+
 # --- Notes internes -----------------------------------------------------------
 
 def note!(notable, body)

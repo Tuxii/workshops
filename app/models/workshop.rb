@@ -3,11 +3,13 @@ class Workshop < ApplicationRecord
   has_many :registrations, through: :sessions
   has_many :participants, -> { distinct }, through: :registrations
   include Notable
+  has_one_attached :handout
 
   scope :published, -> { where(published: true) }
 
   validates :title, presence: true, length: { in: 3..100 }
   validates :duration_minutes, numericality: { only_integer: true, greater_than: 0 }, allow_nil: true
+  validate :handout_is_a_pdf
 
   def formatted_duration
     return if duration_minutes.nil?
@@ -18,4 +20,11 @@ class Workshop < ApplicationRecord
 
     "#{hours} h #{minutes.to_s.rjust(2, '0')}"
   end
+
+  private
+    def handout_is_a_pdf
+      if handout.attached? && handout.content_type != "application/pdf"
+        errors.add(:handout, "n'est pas un fichier PDF")
+      end
+    end
 end
