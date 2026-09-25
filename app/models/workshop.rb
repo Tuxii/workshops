@@ -1,5 +1,7 @@
 class Workshop < ApplicationRecord
   has_many :sessions, dependent: :destroy
+  has_many :registrations, through: :sessions
+  has_many :participants, -> { distinct }, through: :registrations
 
   validates :title, presence: true, length: { in: 3..100 }
   validates :duration_minutes, numericality: { only_integer: true, greater_than: 0 }, allow_nil: true

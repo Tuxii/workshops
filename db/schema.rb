@@ -10,7 +10,25 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_29_184619) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_29_184849) do
+  create_table "participants", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "email", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["email"], name: "index_participants_on_email", unique: true
+  end
+
+  create_table "registrations", force: :cascade do |t|
+    t.integer "session_id", null: false
+    t.integer "participant_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["participant_id"], name: "index_registrations_on_participant_id"
+    t.index ["session_id", "participant_id"], name: "index_registrations_on_session_id_and_participant_id", unique: true
+    t.index ["session_id"], name: "index_registrations_on_session_id"
+  end
+
   create_table "sessions", force: :cascade do |t|
     t.integer "workshop_id", null: false
     t.datetime "starts_at", null: false
@@ -30,5 +48,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_29_184619) do
     t.boolean "published", default: false, null: false
   end
 
+  add_foreign_key "registrations", "participants"
+  add_foreign_key "registrations", "sessions"
   add_foreign_key "sessions", "workshops"
 end

@@ -58,4 +58,37 @@ session!(photo, "2026-11-04 18:00", capacity: 15, status: :draft)
   session!(bike, "#{day} 18:30", capacity: 12)
 end
 
-puts "#{Workshop.count} ateliers, #{Session.count} sessions"
+# --- Participants -------------------------------------------------------------
+
+FIRST_NAMES = %w[Alice Bruno Camille Damien Élodie Fanny Gaëlle Hugo Inès Jules
+                 Karim Léa Mathis Nadia Olivier Pauline Quentin Rose Samir Tiphaine]
+LAST_NAMES = %w[Martin Bernard Dubois Thomas Robert Richard Petit Durand Leroy Moreau
+                Simon Laurent Lefebvre Michel Garcia David Bertrand Roux Vincent Fournier]
+
+participants = (0...60).map do |i|
+  first_name = FIRST_NAMES[i % FIRST_NAMES.size]
+  last_name = LAST_NAMES[(i * 7 + i / FIRST_NAMES.size) % LAST_NAMES.size]
+  email = "#{first_name}.#{last_name}.#{i}".parameterize(separator: ".") + "@example.test"
+  Participant.find_or_create_by!(email: email) { |participant| participant.name = "#{first_name} #{last_name}" }
+end
+
+# --- Inscriptions --------------------------------------------------------------
+
+def register!(workshop, starts_at, participants)
+  session = Session.find_by!(workshop: workshop, starts_at: Time.zone.parse(starts_at))
+  participants.each do |participant|
+    Registration.find_or_create_by!(session: session, participant: participant)
+  end
+end
+
+register!(ceramics, "2026-09-19 10:00", participants[0, 6])
+register!(ceramics, "2026-10-03 10:00", participants[4, 8])    # complète : 8 inscrits pour 8 places
+register!(ceramics, "2026-10-10 10:00", participants[12, 9])   # il reste une place
+register!(bike, "2026-10-06 18:30", participants[21, 5])
+register!(cooking, "2026-09-24 19:00", participants[30, 10])
+register!(cooking, "2026-10-08 19:00", participants[10, 40])   # 40 inscrits
+register!(sewing, "2026-10-14 14:00", participants[50, 2])
+register!(bike, "2026-10-13 18:30", participants[52, 3])
+
+puts "#{Workshop.count} ateliers, #{Session.count} sessions, #{Participant.count} participants, " \
+     "#{Registration.count} inscriptions"

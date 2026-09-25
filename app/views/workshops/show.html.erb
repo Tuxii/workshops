@@ -12,9 +12,10 @@
   <%= publication_badge(@workshop) %>
 </div>
 
-<% if @workshop.formatted_duration %>
-  <p class="text-muted">Durée : <%= @workshop.formatted_duration %></p>
-<% end %>
+<p class="text-muted">
+  <% if @workshop.formatted_duration %>Durée : <%= @workshop.formatted_duration %>.<% end %>
+  <%= pluralize(@workshop.participants.count, "participant", plural: "participants") %> depuis le début.
+</p>
 
 <%= simple_format(@workshop.description) %>
 
