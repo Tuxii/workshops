@@ -8,6 +8,8 @@ class Registration < ApplicationRecord
   after_create :refresh_session_status
   after_destroy :refresh_session_status
 
+  broadcasts_refreshes_to :session
+
   private
     def session_has_seats
       if session && session.remaining_seats <= 0

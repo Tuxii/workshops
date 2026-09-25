@@ -1,0 +1,4 @@
+<%= turbo_stream.remove @registration %>
+<%= turbo_stream.update "remaining_seats", @session.remaining_seats %>
+<%= turbo_stream.update "status_badge", status_badge(@session) %>
+<%= turbo_stream.replace "registration_form", partial: "registrations/form", locals: { session: @session } %>

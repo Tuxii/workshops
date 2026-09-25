@@ -1,13 +1,19 @@
-<%= form_with model: Participant.new, url: session_registrations_path(session), class: "row g-2 align-items-end" do |form| %>
-  <div class="col-md-5">
-    <%= form.label :name, "Nom", class: "form-label" %>
-    <%= form.text_field :name, required: true, class: "form-control" %>
-  </div>
-  <div class="col-md-5">
-    <%= form.label :email, "Email", class: "form-label" %>
-    <%= form.email_field :email, required: true, class: "form-control" %>
-  </div>
-  <div class="col-md-2 d-grid">
-    <%= form.submit "S'inscrire", class: "btn btn-primary" %>
-  </div>
-<% end %>
+<div id="registration_form">
+  <% if session.remaining_seats.positive? %>
+    <%= form_with model: Participant.new, url: session_registrations_path(session), class: "row g-2 align-items-end" do |form| %>
+      <div class="col-md-5">
+        <%= form.label :name, "Nom", class: "form-label" %>
+        <%= form.text_field :name, required: true, class: "form-control" %>
+      </div>
+      <div class="col-md-5">
+        <%= form.label :email, "Email", class: "form-label" %>
+        <%= form.email_field :email, required: true, class: "form-control" %>
+      </div>
+      <div class="col-md-2 d-grid">
+        <%= form.submit "S'inscrire", class: "btn btn-primary" %>
+      </div>
+    <% end %>
+  <% else %>
+    <p class="text-muted">Plus aucune place disponible.</p>
+  <% end %>
+</div>

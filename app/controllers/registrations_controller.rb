@@ -8,7 +8,10 @@ class RegistrationsController < ApplicationController
     @registration = @session.registrations.build(participant: @participant)
 
     if @participant.save && @registration.save
-      redirect_to @session, notice: "Inscription de #{@participant.name} enregistrée."
+      respond_to do |format|
+        format.turbo_stream
+        format.html { redirect_to @session, notice: "Inscription de #{@participant.name} enregistrée." }
+      end
     else
       errors = @participant.errors.full_messages + @registration.errors.full_messages
       redirect_to @session, alert: "Inscription impossible : #{errors.to_sentence}."
@@ -17,9 +20,14 @@ class RegistrationsController < ApplicationController
 
   # DELETE /registrations/1
   def destroy
-    registration = Registration.find(params.expect(:id))
-    registration.destroy!
-    redirect_to registration.session, notice: "Inscription de #{registration.participant.name} annulée.", status: :see_other
+    @registration = Registration.find(params.expect(:id))
+    @session = @registration.session
+    @registration.destroy!
+
+    respond_to do |format|
+      format.turbo_stream
+      format.html { redirect_to @session, notice: "Inscription de #{@registration.participant.name} annulée.", status: :see_other }
+    end
   end
 
   private

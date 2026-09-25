@@ -1,5 +1,11 @@
 <% content_for :title, "#{@session.workshop.title}, #{l(@session.starts_at, format: :short)}" %>
 
+<% content_for :head do %>
+  <%= turbo_refreshes_with method: :morph, scroll: :preserve %>
+<% end %>
+
+<%= turbo_stream_from @session %>
+
 <nav aria-label="Fil d'Ariane">
   <ol class="breadcrumb">
     <li class="breadcrumb-item"><%= link_to "Catalogue", workshops_path %></li>
@@ -11,7 +17,7 @@
 <%= turbo_frame_tag "session_details" do %>
   <div class="d-flex align-items-center gap-3 mb-3">
     <h1 class="h2 mb-0"><%= @session.workshop.title %></h1>
-    <%= status_badge(@session) %>
+    <span id="status_badge"><%= status_badge(@session) %></span>
   </div>
 
   <dl class="row">
@@ -22,7 +28,7 @@
     <dd class="col-sm-9"><%= pluralize(@session.capacity, "place", plural: "places") %></dd>
 
     <dt class="col-sm-3">Places restantes</dt>
-    <dd class="col-sm-9"><%= @session.remaining_seats %></dd>
+    <dd class="col-sm-9" id="remaining_seats"><%= @session.remaining_seats %></dd>
   </dl>
 
   <%= link_to "Modifier", edit_session_path(@session), class: "btn btn-outline-secondary btn-sm" %>
@@ -30,30 +36,22 @@
 <% end %>
 
 <h2 class="h4 mt-5 mb-3">S'inscrire</h2>
-<% if @session.remaining_seats.positive? %>
-  <%= render "registrations/form", session: @session %>
-<% else %>
-  <p class="text-muted">Plus aucune place disponible.</p>
-<% end %>
+<%= render "registrations/form", session: @session %>
 
 <h2 class="h4 mt-5 mb-3">Inscrits</h2>
-<% if @session.registrations.any? %>
-  <table class="table table-sm align-middle">
-    <thead>
-      <tr>
-        <th>Nom</th>
-        <th>Email</th>
-        <th>Inscrit le</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-      <%= render @session.registrations.order(:created_at) %>
-    </tbody>
-  </table>
-<% else %>
-  <p class="text-muted">Personne n'est encore inscrit.</p>
-<% end %>
+<table class="table table-sm align-middle">
+  <thead>
+    <tr>
+      <th>Nom</th>
+      <th>Email</th>
+      <th>Inscrit le</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody id="registrations">
+    <%= render @session.registrations.order(:created_at) %>
+  </tbody>
+</table>
 
 <%= render "notes/notes", notable: @session %>
 
