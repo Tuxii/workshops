@@ -4,7 +4,9 @@ class SessionsController < ApplicationController
 
   # GET /sessions
   def index
-    @sessions = Session.order(:starts_at)
+    @sessions = Session.includes(:workshop).order(:starts_at)
+    @sessions = @sessions.upcoming if params[:upcoming] == "1"
+    @sessions = @sessions.with_status(params[:status]).for_workshop(params[:workshop_id])
   end
 
   # GET /sessions/1
