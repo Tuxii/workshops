@@ -7,20 +7,24 @@
   </ol>
 </nav>
 
-<div class="d-flex align-items-center gap-3 mb-3">
-  <h1 class="h2 mb-0"><%= @workshop.title %></h1>
-  <%= publication_badge(@workshop) %>
-</div>
+<%= turbo_frame_tag "workshop_details" do %>
+  <div class="d-flex align-items-center gap-3 mb-3">
+    <h1 class="h2 mb-0"><%= @workshop.title %></h1>
+    <%= publication_badge(@workshop) %>
+  </div>
 
-<p class="text-muted">
-  <% if @workshop.formatted_duration %>Durée : <%= @workshop.formatted_duration %>.<% end %>
-  <%= pluralize(@workshop.participants.count, "participant", plural: "participants") %> depuis le début.
-</p>
+  <p class="text-muted">
+    <% if @workshop.formatted_duration %>Durée : <%= @workshop.formatted_duration %>.<% end %>
+    <%= pluralize(@workshop.participants.count, "participant", plural: "participants") %> depuis le début.
+  </p>
 
-<%= simple_format(@workshop.description) %>
+  <%= simple_format(@workshop.description) %>
 
-<% if @workshop.handout.attached? %>
-  <p><%= link_to "Télécharger le support PDF", rails_blob_path(@workshop.handout, disposition: "attachment"), class: "btn btn-outline-primary btn-sm" %></p>
+  <% if @workshop.handout.attached? %>
+    <p><%= link_to "Télécharger le support PDF", rails_blob_path(@workshop.handout, disposition: "attachment"), class: "btn btn-outline-primary btn-sm" %></p>
+  <% end %>
+
+  <%= link_to "Modifier", edit_workshop_path(@workshop), class: "btn btn-outline-secondary btn-sm" %>
 <% end %>
 
 <div class="d-flex justify-content-between align-items-center mt-5 mb-3">
@@ -48,7 +52,6 @@
 
 <%= render "notes/notes", notable: @workshop %>
 
-<div class="d-flex gap-2 mt-4">
-  <%= link_to "Modifier", edit_workshop_path(@workshop), class: "btn btn-outline-secondary" %>
+<div class="mt-4">
   <%= button_to "Supprimer", @workshop, method: :delete, class: "btn btn-outline-danger" %>
 </div>

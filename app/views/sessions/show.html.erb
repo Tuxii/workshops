@@ -8,21 +8,26 @@
   </ol>
 </nav>
 
-<div class="d-flex align-items-center gap-3 mb-3">
-  <h1 class="h2 mb-0"><%= @session.workshop.title %></h1>
-  <%= status_badge(@session) %>
-</div>
+<%= turbo_frame_tag "session_details" do %>
+  <div class="d-flex align-items-center gap-3 mb-3">
+    <h1 class="h2 mb-0"><%= @session.workshop.title %></h1>
+    <%= status_badge(@session) %>
+  </div>
 
-<dl class="row">
-  <dt class="col-sm-3">Début</dt>
-  <dd class="col-sm-9"><%= l(@session.starts_at, format: :long) %></dd>
+  <dl class="row">
+    <dt class="col-sm-3">Début</dt>
+    <dd class="col-sm-9"><%= l(@session.starts_at, format: :long) %></dd>
 
-  <dt class="col-sm-3">Capacité</dt>
-  <dd class="col-sm-9"><%= pluralize(@session.capacity, "place", plural: "places") %></dd>
+    <dt class="col-sm-3">Capacité</dt>
+    <dd class="col-sm-9"><%= pluralize(@session.capacity, "place", plural: "places") %></dd>
 
-  <dt class="col-sm-3">Places restantes</dt>
-  <dd class="col-sm-9"><%= @session.remaining_seats %></dd>
-</dl>
+    <dt class="col-sm-3">Places restantes</dt>
+    <dd class="col-sm-9"><%= @session.remaining_seats %></dd>
+  </dl>
+
+  <%= link_to "Modifier", edit_session_path(@session), class: "btn btn-outline-secondary btn-sm" %>
+  <%= link_to "Voir l'atelier", @session.workshop, class: "btn btn-link btn-sm", data: { turbo_frame: "_top" } %>
+<% end %>
 
 <h2 class="h4 mt-5 mb-3">S'inscrire</h2>
 <% if @session.remaining_seats.positive? %>
@@ -52,7 +57,6 @@
 
 <%= render "notes/notes", notable: @session %>
 
-<div class="d-flex gap-2 mt-4">
-  <%= link_to "Modifier", edit_session_path(@session), class: "btn btn-outline-secondary" %>
+<div class="mt-4">
   <%= button_to "Supprimer", @session, method: :delete, class: "btn btn-outline-danger" %>
 </div>
