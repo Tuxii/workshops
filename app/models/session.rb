@@ -11,4 +11,12 @@ class Session < ApplicationRecord
   def remaining_seats
     capacity - registrations.count
   end
+
+  def refresh_status
+    if published? && remaining_seats.zero?
+      full!
+    elsif full? && remaining_seats.positive?
+      published!
+    end
+  end
 end
