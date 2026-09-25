@@ -2,7 +2,7 @@ require "test_helper"
 
 class WorkshopsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @workshop = workshops(:one)
+    @workshop = workshops(:ceramics)
   end
 
   test "should get index" do
