@@ -19,10 +19,17 @@
 
   <dt class="col-sm-3">Capacité</dt>
   <dd class="col-sm-9"><%= pluralize(@session.capacity, "place", plural: "places") %></dd>
+
+  <dt class="col-sm-3">Places restantes</dt>
+  <dd class="col-sm-9"><%= @session.remaining_seats %></dd>
 </dl>
 
 <h2 class="h4 mt-5 mb-3">S'inscrire</h2>
-<%= render "registrations/form", session: @session %>
+<% if @session.remaining_seats.positive? %>
+  <%= render "registrations/form", session: @session %>
+<% else %>
+  <p class="text-muted">Plus aucune place disponible.</p>
+<% end %>
 
 <h2 class="h4 mt-5 mb-3">Inscrits</h2>
 <% if @session.registrations.any? %>
@@ -32,6 +39,7 @@
         <th>Nom</th>
         <th>Email</th>
         <th>Inscrit le</th>
+        <th></th>
       </tr>
     </thead>
     <tbody>

@@ -2,4 +2,8 @@
   <td><%= registration.participant.name %></td>
   <td><%= registration.participant.email %></td>
   <td><%= l(registration.created_at, format: :short) %></td>
+  <td class="text-end">
+    <%= button_to "Désinscrire", registration, method: :delete, class: "btn btn-sm btn-outline-danger",
+          form: { data: { turbo_confirm: "Désinscrire #{registration.participant.name} ?" } } %>
+  </td>
 </tr>

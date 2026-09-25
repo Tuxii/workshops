@@ -7,4 +7,8 @@ class Session < ApplicationRecord
 
   validates :starts_at, presence: true
   validates :capacity, numericality: { only_integer: true, greater_than: 0 }
+
+  def remaining_seats
+    capacity - registrations.count
+  end
 end

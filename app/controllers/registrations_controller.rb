@@ -1,5 +1,5 @@
 class RegistrationsController < ApplicationController
-  before_action :set_session
+  before_action :set_session, only: :create
 
   # POST /sessions/1/registrations
   def create
@@ -13,6 +13,13 @@ class RegistrationsController < ApplicationController
       errors = @participant.errors.full_messages + @registration.errors.full_messages
       redirect_to @session, alert: "Inscription impossible : #{errors.to_sentence}."
     end
+  end
+
+  # DELETE /registrations/1
+  def destroy
+    registration = Registration.find(params.expect(:id))
+    registration.destroy!
+    redirect_to registration.session, notice: "Inscription de #{registration.participant.name} annulée.", status: :see_other
   end
 
   private
